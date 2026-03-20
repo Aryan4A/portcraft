@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PortCraft — Builder</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+body{overflow:hidden}
+@media(max-width:850px){body{overflow:auto}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="solid">
+  <div class="nav-wrap">
+    <a href="index.html" class="nav-brand"><div class="brand-mark">P</div>PortCraft</a>
+    <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
+    <div class="nav-menu" id="navMenu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="builder.html" class="nav-link active">Builder</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions" id="navActions">
+      <button class="btn btn-ghost btn-sm" onclick="PF.reset()">↺ Reset</button>
+      <button class="btn btn-primary btn-sm" onclick="PF.download()">⬇ Download Portfolio</button>
+    </div>
+  </div>
+</nav>
+
+<!-- BUILDER LAYOUT -->
+<div class="builder-layout">
+
+  <!-- ██ LEFT: FORM PANEL ██ -->
+  <div class="build-panel">
+    <div class="build-panel-head">
+      <div class="build-panel-title">
+        <span id="stepTitle">📋 Basic Info</span>
+      </div>
+      <div class="step-indicators" id="stepDots"></div>
+    </div>
+
+    <div class="build-form" id="buildForm">
+
+      <!-- STEP 1: Basic Info -->
+      <div class="step-page active" data-step="1">
+        <div class="step-header">
+          <div class="step-num">Step 1 of 6</div>
+          <h2>Personal Information</h2>
+          <p>Start with the basics — this is who you are.</p>
+        </div>
+
+        <!-- Photo upload -->
+        <div class="field">
+          <label>Profile Photo</label>
+          <div class="photo-zone" id="photoZone">
+            <input type="file" id="photoInput" accept="image/*" onchange="PF.handlePhoto(event)"/>
+            <div class="pz-preview" id="photoPreview"><img id="photoImg" src="" alt=""/></div>
+            <div class="pz-icon">📷</div>
+            <div class="pz-text">Click to upload your photo</div>
+            <div class="pz-sub">JPG, PNG, GIF — embedded in portfolio</div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="field"><label>Full Name *</label><input class="input" id="f-name" placeholder="Jane Doe" oninput="PF.render()"/></div>
+          <div class="field"><label>Job Title *</label><input class="input" id="f-title" placeholder="Full Stack Developer" oninput="PF.render()"/></div>
+        </div>
+        <div class="field"><label>Tagline</label><input class="input" id="f-tagline" placeholder="Building the future, one commit at a time" oninput="PF.render()"/></div>
+        <div class="field"><label>About Me *</label><textarea class="textarea" id="f-about" rows="4" placeholder="Write a compelling 2-3 sentence bio about yourself, your passion and what you build..." oninput="PF.render()"></textarea></div>
+        <div class="input-row">
+          <div class="field"><label>Location</label><input class="input" id="f-location" placeholder="San Francisco, CA" oninput="PF.render()"/></div>
+          <div class="field"><label>Years of Experience</label><input class="input" id="f-exp" type="number" min="0" max="50" placeholder="3" oninput="PF.render()"/></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Contact & Links -->
+      <div class="step-page" data-step="2">
+        <div class="step-header">
+          <div class="step-num">Step 2 of 6</div>
+          <h2>Contact & Social Links</h2>
+          <p>How can people reach you or find your work?</p>
+        </div>
+        <div class="field"><label>Email Address</label><input class="input" id="f-email" type="email" placeholder="jane@example.com" oninput="PF.render()"/></div>
+        <div class="field"><label>Phone (optional)</label><input class="input" id="f-phone" placeholder="+1 (555) 000-0000" oninput="PF.render()"/></div>
+        <div class="field"><label>GitHub URL</label><input class="input" id="f-github" placeholder="https://github.com/janedoe" oninput="PF.render()"/></div>
+        <div class="field"><label>LinkedIn URL</label><input class="input" id="f-linkedin" placeholder="https://linkedin.com/in/janedoe" oninput="PF.render()"/></div>
+        <div class="field"><label>Personal Website / Portfolio URL</label><input class="input" id="f-website" placeholder="https://janedoe.dev" oninput="PF.render()"/></div>
+        <div class="field"><label>Twitter / X</label><input class="input" id="f-twitter" placeholder="https://twitter.com/janedoe" oninput="PF.render()"/></div>
+      </div>
+
+      <!-- STEP 3: Skills -->
+      <div class="step-page" data-step="3">
+        <div class="step-header">
+          <div class="step-num">Step 3 of 6</div>
+          <h2>Skills & Expertise</h2>
+          <p>Add your technical and soft skills with proficiency levels.</p>
+        </div>
+        <div id="skillsList"></div>
+        <button class="add-item-btn" onclick="PF.addSkill()">+ Add Skill</button>
+        <div class="field" style="margin-top:20px">
+          <label>Tech Stack Tags</label>
+          <p class="field-hint">Quick tags shown as chips in your portfolio</p>
+          <div class="tags-wrap" id="techTags"></div>
+          <div class="tag-input-row">
+            <input class="input" id="techInput" placeholder="e.g. React, Docker, AWS..." onkeydown="PF.techKey(event)"/>
+            <button class="btn btn-outline btn-sm" onclick="PF.addTech()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Projects -->
+      <div class="step-page" data-step="4">
+        <div class="step-header">
+          <div class="step-num">Step 4 of 6</div>
+          <h2>Projects</h2>
+          <p>Showcase your best work — quality over quantity.</p>
+        </div>
+        <div id="projectsList"></div>
+        <button class="add-item-btn" onclick="PF.addProject()">+ Add Project</button>
+      </div>
+
+      <!-- STEP 5: Education & Experience -->
+      <div class="step-page" data-step="5">
+        <div class="step-header">
+          <div class="step-num">Step 5 of 6</div>
+          <h2>Education & Experience</h2>
+          <p>Add your academic background and work history.</p>
+        </div>
+        <h4 style="font-size:0.85rem;font-weight:700;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">Education</h4>
+        <div id="eduList"></div>
+        <button class="add-item-btn" onclick="PF.addEdu()">+ Add Education</button>
+        <h4 style="font-size:0.85rem;font-weight:700;color:var(--t2);margin:20px 0 12px;text-transform:uppercase;letter-spacing:0.05em">Work Experience</h4>
+        <div id="expList"></div>
+        <button class="add-item-btn" onclick="PF.addExp()">+ Add Experience</button>
+      </div>
+
+      <!-- STEP 6: Style -->
+      <div class="step-page" data-step="6">
+        <div class="step-header">
+          <div class="step-num">Step 6 of 6</div>
+          <h2>Design & Style</h2>
+          <p>Pick your template and accent color.</p>
+        </div>
+        <div class="field">
+          <label>Template</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:6px">
+            <div class="tpl-option" data-tpl="modern" onclick="PF.setTpl('modern',this)">
+              <div style="height:60px;background:linear-gradient(135deg,#070810,#1a1f40);border-radius:8px;margin-bottom:6px"></div>
+              <div style="font-size:0.75rem;font-weight:600;text-align:center">Modern Dark</div>
+            </div>
+            <div class="tpl-option" data-tpl="neon" onclick="PF.setTpl('neon',this)">
+              <div style="height:60px;background:linear-gradient(135deg,#030305,#0d0014);border-radius:8px;margin-bottom:6px"></div>
+              <div style="font-size:0.75rem;font-weight:600;text-align:center">Neon Night</div>
+            </div>
+            <div class="tpl-option" data-tpl="light" onclick="PF.setTpl('light',this)">
+              <div style="height:60px;background:linear-gradient(135deg,#f8faff,#edf2ff);border-radius:8px;margin-bottom:6px"></div>
+              <div style="font-size:0.75rem;font-weight:600;text-align:center">Clean Light</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Accent Color</label>
+          <div class="color-swatches" id="colorSwatches">
+            <div class="color-swatch sel" data-color="#7090ff" style="background:#7090ff" onclick="PF.setColor('#7090ff',this)"></div>
+            <div class="color-swatch" data-color="#a855f7" style="background:#a855f7" onclick="PF.setColor('#a855f7',this)"></div>
+            <div class="color-swatch" data-color="#2dd4bf" style="background:#2dd4bf" onclick="PF.setColor('#2dd4bf',this)"></div>
+            <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" onclick="PF.setColor('#f59e0b',this)"></div>
+            <div class="color-swatch" data-color="#ef4444" style="background:#ef4444" onclick="PF.setColor('#ef4444',this)"></div>
+            <div class="color-swatch" data-color="#10b981" style="background:#10b981" onclick="PF.setColor('#10b981',this)"></div>
+            <div class="color-swatch" data-color="#f97316" style="background:#f97316" onclick="PF.setColor('#f97316',this)"></div>
+            <div class="color-swatch" data-color="#ec4899" style="background:#ec4899" onclick="PF.setColor('#ec4899',this)"></div>
+          </div>
+          <input type="color" class="input" id="customColor" style="height:42px;padding:4px;margin-top:10px" value="#7090ff" oninput="PF.setColor(this.value,null)"/>
+        </div>
+        <div class="field">
+          <label>Font Style</label>
+          <select class="select" id="fontStyle" onchange="PF.render()">
+            <option value="syne">Syne (Modern Sans)</option>
+            <option value="playfair">Playfair Display (Editorial)</option>
+            <option value="mono">JetBrains Mono (Technical)</option>
+            <option value="poppins">Poppins (Friendly)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Layout Style</label>
+          <select class="select" id="layoutStyle" onchange="PF.render()">
+            <option value="sidebar">Sidebar (Photo left, content right)</option>
+            <option value="hero">Hero (Full-width header)</option>
+            <option value="card">Card Stack (Sections as cards)</option>
+          </select>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:8px">
+          <p style="font-size:0.82rem;color:var(--t2);margin-bottom:10px;font-weight:600">Extra Sections</p>
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer"><input type="checkbox" id="showHobbies" onchange="PF.render()"/> <span style="font-size:0.85rem">Show Hobbies</span></label>
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer"><input type="checkbox" id="showCerts" onchange="PF.render()"/> <span style="font-size:0.85rem">Show Certifications</span></label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" id="showLangs" onchange="PF.render()"/> <span style="font-size:0.85rem">Show Languages</span></label>
+        </div>
+        <div id="hobbiesWrap" class="field" style="margin-top:16px;display:none">
+          <label>Hobbies & Interests</label>
+          <textarea class="textarea" id="f-hobbies" rows="2" placeholder="Photography, Open Source, Gaming, Reading..." oninput="PF.render()"></textarea>
+        </div>
+        <div id="certsWrap" class="field" style="display:none">
+          <label>Certifications</label>
+          <textarea class="textarea" id="f-certs" rows="2" placeholder="AWS Certified Developer, Google Cloud, etc." oninput="PF.render()"></textarea>
+        </div>
+        <div id="langsWrap" class="field" style="display:none">
+          <label>Languages</label>
+          <input class="input" id="f-langs" placeholder="English (Native), Spanish (B2), Hindi (Native)" oninput="PF.render()"/>
+        </div>
+      </div>
+
+    </div><!-- /build-form -->
+
+    <!-- NAV BUTTONS -->
+    <div class="build-nav">
+      <button class="btn btn-ghost btn-sm" id="btnPrev" onclick="PF.prev()" style="display:none">← Back</button>
+      <button class="btn btn-primary btn-sm" id="btnNext" onclick="PF.next()" style="margin-left:auto">Next →</button>
+      <button class="btn btn-primary btn-sm" id="btnDownload" onclick="PF.download()" style="display:none;background:linear-gradient(135deg,#10b981,#059669)">⬇ Download Portfolio</button>
+    </div>
+  </div><!-- /build-panel -->
+
+  <!-- ██ RIGHT: PREVIEW PANEL ██ -->
+  <div class="preview-panel">
+    <div class="preview-toolbar">
+      <div class="preview-label"><span class="live-dot"></span> LIVE PREVIEW</div>
+      <div class="preview-tabs">
+        <div class="preview-tab active" onclick="PF.setPreviewWidth('100%',this)">🖥 Desktop</div>
+        <div class="preview-tab" onclick="PF.setPreviewWidth('768px',this)">📱 Tablet</div>
+        <div class="preview-tab" onclick="PF.setPreviewWidth('375px',this)">📱 Mobile</div>
+      </div>
+      <div class="preview-actions">
+        <button class="btn btn-ghost btn-sm" onclick="PF.download()">⬇ Download</button>
+      </div>
+    </div>
+    <div class="preview-frame-wrap" id="previewWrap" style="display:flex;align-items:flex-start;justify-content:center;overflow:auto;background:#1a1a2e">
+      <iframe id="previewFrame" style="border:none;width:100%;height:100%;min-height:100%;transition:width 0.4s var(--ease)"></iframe>
+    </div>
+  </div>
+
+</div><!-- /builder-layout -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<style>
+.tpl-option{
+  background:var(--bg3);border:2px solid var(--border);border-radius:10px;
+  padding:10px;cursor:pointer;transition:all 0.2s;
+}
+.tpl-option:hover{border-color:var(--borderc)}
+.tpl-option.active{border-color:var(--blue);box-shadow:0 0 0 3px var(--bluedim)}
+</style>
+
+<script src="script.js"></script>
+<script src="builder.js"></script>
+</body>
+</html>
